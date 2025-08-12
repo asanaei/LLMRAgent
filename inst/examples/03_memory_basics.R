@@ -1,6 +1,6 @@
 ## Memory basics demo (offline)
 
-library(LLMR.Agent)
+library(LLMRAgent)
 
 buf <- new_buffer_memory(3)
 buf$add(create_message("user", "first"))

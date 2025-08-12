@@ -1,4 +1,4 @@
-LLMR.Agent 0.1.0
+LLMRAgent 0.1.0
 ================
 
 - Initial CRAN-ready release with conservative, deterministic core.

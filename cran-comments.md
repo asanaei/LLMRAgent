@@ -1,4 +1,4 @@
-CRAN submission for LLMR.Agent 0.1.0
+CRAN submission for LLMRAgent 0.1.0
 ====================================
 
 Summary
@@ -15,7 +15,7 @@ Notes
 Network policy
 - All examples, tests, and vignettes run without network access.
 - Network tools (`web_search`, `wiki_fetch`) are registered but hard-fail with a clear error unless both
-  `options(LLMR.Agent.enable_network = TRUE)` and `register_basic_tools(enable_network = TRUE)` are set.
+  `options(LLMRAgent.enable_network = TRUE)` and `register_basic_tools(enable_network = TRUE)` are set.
 - Examples for networked functionality are guarded and not executed by default.
 
 Computation policy

@@ -1,8 +1,8 @@
 ---
-title: "LLMR.Agent quickstart"
+title: "LLMRAgent quickstart"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{LLMR.Agent quickstart}
+  %\VignetteIndexEntry{LLMRAgent quickstart}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,10 +12,10 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ```{r setup}
-library(LLMR.Agent)
+library(LLMRAgent)
 ```
 
-This vignette demonstrates the LLMR.Agent package which provides a simple 
+This vignette demonstrates the LLMRAgent package which provides a simple 
 interface to create AI agents using LLMR model configurations.
 
 ## Key Features
@@ -205,7 +205,7 @@ try(new_agent("Be helpful."))
 
 ## Summary
 
-The LLMR.Agent package provides a clean interface to LLMR:
+The LLMRAgent package provides a clean interface to LLMR:
 
 - **Required**: Valid `LLMR::llm_config()` 
 - **Direct integration**: No adapter complexity

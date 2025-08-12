@@ -10,7 +10,7 @@ They validate inputs and return a character result.
 \section{Registry design}{
 
 \itemize{
-\item Global, in-memory registry stored under option \code{LLMR.Agent.tools}.
+\item Global, in-memory registry stored under option \code{LLMRAgent.tools}.
 \item Idempotent add/remove by unique \code{name}.
 \item Thread-safe for base-R single-threaded code. No promises under forked parallelism.
 }

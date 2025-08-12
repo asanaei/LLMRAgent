@@ -3,7 +3,7 @@
     #'
     #' Provides opt-in registration for conservative tools: `web_search`, `wiki_fetch`,
     #' and `execute_r`. Network tools require both `enable_network = TRUE` and the
-    #' option `options(LLMR.Agent.enable_network = TRUE)`.
+    #' option `options(LLMRAgent.enable_network = TRUE)`.
     #'
     #' @param enable_network Logical. If TRUE, allows HTTP tools to perform requests.
     #' @return Invisibly, character vector of registered tool names.
@@ -11,11 +11,11 @@
     #' @examples
     #' 
     #' # Safe default (no network calls in tests)
-    #' LLMR.Agent::register_basic_tools(enable_network = FALSE)
+    #' LLMRAgent::register_basic_tools(enable_network = FALSE)
     #'
     #' # To enable network at runtime (interactive only):
-    #' # options(LLMR.Agent.enable_network = TRUE)
-    #' # LLMR.Agent::register_basic_tools(enable_network = TRUE)
+    #' # options(LLMRAgent.enable_network = TRUE)
+    #' # LLMRAgent::register_basic_tools(enable_network = TRUE)
     #'
     #' @export
     register_basic_tools <- function(enable_network = FALSE) {
@@ -25,8 +25,8 @@
         description = "Search the web (SerpAPI key required; opt-in). Returns top titles + links.",
         parameters = list(q = list(type="string", required=TRUE), num = list(type="number", required=FALSE)),
         fun = function(args) {
-          if (!isTRUE(getOption("LLMR.Agent.enable_network", FALSE)) || !enable_network) {
-            stop("Network-disabled: set options(LLMR.Agent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
+          if (!isTRUE(getOption("LLMRAgent.enable_network", FALSE)) || !enable_network) {
+            stop("Network-disabled: set options(LLMRAgent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
           }
           if (!requireNamespace("httr2", quietly = TRUE)) stop("httr2 not installed.")
           key <- Sys.getenv("SERPAPI_KEY", "")
@@ -51,14 +51,14 @@
         description = "Get summary from Wikipedia REST API for a title.",
         parameters = list(title = list(type="string", required=TRUE)),
         fun = function(args) {
-          if (!isTRUE(getOption("LLMR.Agent.enable_network", FALSE)) || !enable_network) {
-            stop("Network-disabled: set options(LLMR.Agent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
+          if (!isTRUE(getOption("LLMRAgent.enable_network", FALSE)) || !enable_network) {
+            stop("Network-disabled: set options(LLMRAgent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
           }
           if (!requireNamespace("httr2", quietly = TRUE)) stop("httr2 not installed.")
           title <- utils::URLencode(args$title, reserved = TRUE)
           url <- sprintf("https://en.wikipedia.org/api/rest_v1/page/summary/%s", title)
           req <- httr2::request(url) |>
-            httr2::req_user_agent("LLMR.Agent/0.2") |>
+            httr2::req_user_agent("LLMRAgent/0.2") |>
             httr2::req_timeout(10)
           resp <- httr2::req_perform(req)
           dat <- httr2::resp_body_json(resp, check_type = FALSE)
@@ -74,8 +74,8 @@
         fun = function(args) {
           code <- as.character(args$code)[1]
           # time limits
-          cpu <- getOption("LLMR.Agent.execute_r.max_seconds", 2)
-          elp <- getOption("LLMR.Agent.execute_r.max_elapsed", 5)
+          cpu <- getOption("LLMRAgent.execute_r.max_seconds", 2)
+          elp <- getOption("LLMRAgent.execute_r.max_elapsed", 5)
           setTimeLimit(cpu = cpu, elapsed = elp, transient = TRUE)
           on.exit(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), add = TRUE)
           # locked env with minimal bindings

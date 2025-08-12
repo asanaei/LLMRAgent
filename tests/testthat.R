@@ -1,3 +1,3 @@
 library(testthat)
-library(LLMR.Agent)
-test_check("LLMR.Agent")
+library(LLMRAgent)
+test_check("LLMRAgent")

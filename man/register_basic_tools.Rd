@@ -15,16 +15,16 @@ Invisibly, character vector of registered tool names.
 \description{
 Provides opt-in registration for conservative tools: \code{web_search}, \code{wiki_fetch},
 and \code{execute_r}. Network tools require both \code{enable_network = TRUE} and the
-option \code{options(LLMR.Agent.enable_network = TRUE)}.
+option \code{options(LLMRAgent.enable_network = TRUE)}.
 }
 \examples{
 
 # Safe default (no network calls in tests)
-LLMR.Agent::register_basic_tools(enable_network = FALSE)
+LLMRAgent::register_basic_tools(enable_network = FALSE)
 
 # To enable network at runtime (interactive only):
-# options(LLMR.Agent.enable_network = TRUE)
-# LLMR.Agent::register_basic_tools(enable_network = TRUE)
+# options(LLMRAgent.enable_network = TRUE)
+# LLMRAgent::register_basic_tools(enable_network = TRUE)
 
 }
 \seealso{

@@ -5,7 +5,7 @@
     #' They validate inputs and return a character result.
     #'
     #' @section Registry design:
-    #' - Global, in-memory registry stored under option `LLMR.Agent.tools`.
+    #' - Global, in-memory registry stored under option `LLMRAgent.tools`.
     #' - Idempotent add/remove by unique `name`.
     #' - Thread-safe for base-R single-threaded code. No promises under forked parallelism.
     #'
@@ -76,10 +76,10 @@
     #' @export
     register_tool <- function(tool) {
       stopifnot(inherits(tool, "llmr_tool"))
-      reg <- getOption("LLMR.Agent.tools", list())
+      reg <- getOption("LLMRAgent.tools", list())
       if (tool$name %in% names(reg)) stop("Tool already registered: ", tool$name)
       reg[[tool$name]] <- tool
-      options(LLMR.Agent.tools = reg)
+      options(LLMRAgent.tools = reg)
       invisible(tool$name)
     }
 
@@ -92,10 +92,10 @@
     #' @seealso [register_tool()], [list_tools()], [tool-api]
     #' @export
     unregister_tool <- function(name) {
-      reg <- getOption("LLMR.Agent.tools", list())
+      reg <- getOption("LLMRAgent.tools", list())
       if (!length(reg) || is.null(reg[[name]])) return(FALSE)
       reg[[name]] <- NULL
-      options(LLMR.Agent.tools = reg)
+      options(LLMRAgent.tools = reg)
       TRUE
     }
 
@@ -104,7 +104,7 @@
     #' @seealso [register_tool()], [unregister_tool()], [list_tools()]
     #' @export
     get_tool <- function(name) {
-      reg <- getOption("LLMR.Agent.tools", list())
+      reg <- getOption("LLMRAgent.tools", list())
       reg[[name]]
     }
 
@@ -113,7 +113,7 @@
     #' @seealso [register_tool()], [unregister_tool()], [get_tool()]
     #' @export
     list_tools <- function() {
-      reg <- getOption("LLMR.Agent.tools", list())
+      reg <- getOption("LLMRAgent.tools", list())
       if (!length(reg)) return(tibble::tibble(name = character(), description = character()))
       tibble::tibble(
         name = names(reg),
@@ -126,7 +126,7 @@
     #' @seealso [list_tools()], [register_tool()], [unregister_tool()], [get_tool()]
     #' @export
     clear_tools <- function() {
-      options(LLMR.Agent.tools = list())
+      options(LLMRAgent.tools = list())
       invisible(TRUE)
     }
 

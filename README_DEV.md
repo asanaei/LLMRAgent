@@ -1,4 +1,4 @@
-# LLMR.Agent – Developer Guide (single source of truth)
+# LLMRAgent – Developer Guide (single source of truth)
 
 **Date:** 2025-08-12  
 **Scope:** Deliver a conservative, expandable v0.1.0 agent framework in R.
@@ -30,14 +30,14 @@
 # install deps you actually need
 # install.packages(c("R6","tibble","purrr","jsonlite","glue"))
 
-library(LLMR.Agent)
+library(LLMRAgent)
 agent <- new_agent(system_prompt = "Be brief.")
 agent_reply(agent, "hello")
 ```
 
 To enable built-in tools (still offline tests), opt-in registration at runtime:
 ```r
-LLMR.Agent::register_basic_tools(enable_network = FALSE)  # safe default
+LLMRAgent::register_basic_tools(enable_network = FALSE)  # safe default
 ```
 
 ## 4) Detailed TODOs for the week (clear acceptance criteria)
@@ -94,10 +94,10 @@ LLMR.Agent::register_basic_tools(enable_network = FALSE)  # safe default
 ## 7) How to enable/disable risky features
 
 ```r
-options(LLMR.Agent.autoload_tools = FALSE)        # default
-options(LLMR.Agent.enable_network = FALSE)        # default
-options(LLMR.Agent.execute_r.max_seconds = 2)     # CPU
-options(LLMR.Agent.execute_r.max_elapsed = 5)     # wall-clock
+options(LLMRAgent.autoload_tools = FALSE)        # default
+options(LLMRAgent.enable_network = FALSE)        # default
+options(LLMRAgent.execute_r.max_seconds = 2)     # CPU
+options(LLMRAgent.execute_r.max_elapsed = 5)     # wall-clock
 ```
 
 ## 8) Release checklist

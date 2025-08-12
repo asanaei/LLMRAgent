@@ -1,5 +1,5 @@
 Type: Package
-Package: LLMR.Agent
+Package: LLMRAgent
 Title: Conservative Agent Framework for LLM Workflows in R
 Version: 0.1.0
 Author: Ali Sanaei <sanaei@uchicago.edu>
@@ -28,5 +28,5 @@ Suggests:
     pkgdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/your-org/LLMR.Agent
-BugReports: https://github.com/your-org/LLMR.Agent/issues
+URL: https://github.com/your-org/LLMRAgent
+BugReports: https://github.com/your-org/LLMRAgent/issues

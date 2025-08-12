@@ -1,9 +1,9 @@
 ## Memory and Conversation Demo with OpenAI
 ## Requires OPENAI_API_KEY environment variable
-## Run: source(system.file("examples", "04_memory_and_conversation.R", package = "LLMR.Agent"))
+## Run: source(system.file("examples", "04_memory_and_conversation.R", package = "LLMRAgent"))
 
 library(LLMR)
-library(LLMR.Agent)
+library(LLMRAgent)
 
 # Check for API key
 if (Sys.getenv("OPENAI_API_KEY") == "") {

@@ -1,4 +1,4 @@
-* using log directory ‘/Users/ali/Library/CloudStorage/Box-Box/Research/development/LLMR.Agent/LLMR.Agent.Rcheck’
+* using log directory ‘/Users/ali/Library/CloudStorage/Box-Box/Research/development/LLMRAgent/LLMRAgent.Rcheck’
 * using R version 4.4.3 (2025-02-28)
 * using platform: aarch64-apple-darwin20
 * R was compiled by
@@ -7,20 +7,20 @@
 * running under: macOS Sequoia 15.6
 * using session charset: UTF-8
 * using option ‘--as-cran’
-* checking for file ‘LLMR.Agent/DESCRIPTION’ ... OK
+* checking for file ‘LLMRAgent/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘LLMR.Agent’ version ‘0.1.0’
+* this is package ‘LLMRAgent’ version ‘0.1.0’
 * package encoding: UTF-8
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: ‘Ali Sanaei <sanaei@uchicago.edu>’
 
 Found the following (possibly) invalid URLs:
-  URL: https://github.com/your-org/LLMR.Agent
+  URL: https://github.com/your-org/LLMRAgent
     From: DESCRIPTION
     Status: Error
     Message: libcurl error code 6:
       	Could not resolve host: github.com
-  URL: https://github.com/your-org/LLMR.Agent/issues
+  URL: https://github.com/your-org/LLMRAgent/issues
     From: DESCRIPTION
     Status: Error
     Message: libcurl error code 6:
@@ -33,7 +33,7 @@ Found the following (possibly) invalid URLs:
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
-* checking whether package ‘LLMR.Agent’ can be installed ... OK
+* checking whether package ‘LLMRAgent’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking for future file timestamps ... NOTE

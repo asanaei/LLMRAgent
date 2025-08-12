@@ -128,7 +128,7 @@ R/11_adapter_llmr.R:3:81: style: [line_length_linter] Lines should not be more t
 #' Creates a small adapter function suitable for `new_agent(llm_adapter = ...)` that
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
 R/11_adapter_llmr.R:5:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 81 characters.
-#' core `LLMR.Agent` package free of network calls while making integration easy.
+#' core `LLMRAgent` package free of network calls while making integration easy.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
 R/11_adapter_llmr.R:31:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 103 characters.
     stop("Package 'LLMR' is required for this adapter. Install it to enable network-backed LLM calls.")
@@ -176,10 +176,10 @@ R/30_tools_basic.R:26:101: style: [infix_spaces_linter] Put spaces around all in
         parameters = list(q = list(type="string", required=TRUE), num = list(type="number", required=FALSE)),
                                                                                                     ^
 R/30_tools_basic.R:28:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 90 characters.
-          if (!isTRUE(getOption("LLMR.Agent.enable_network", FALSE)) || !enable_network) {
+          if (!isTRUE(getOption("LLMRAgent.enable_network", FALSE)) || !enable_network) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
 R/30_tools_basic.R:29:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 133 characters.
-            stop("Network-disabled: set options(LLMR.Agent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
+            stop("Network-disabled: set options(LLMRAgent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 R/30_tools_basic.R:31:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 86 characters.
           if (!requireNamespace("httr2", quietly = TRUE)) stop("httr2 not installed.")
@@ -200,10 +200,10 @@ R/30_tools_basic.R:52:63: style: [infix_spaces_linter] Put spaces around all inf
         parameters = list(title = list(type="string", required=TRUE)),
                                                               ^
 R/30_tools_basic.R:54:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 90 characters.
-          if (!isTRUE(getOption("LLMR.Agent.enable_network", FALSE)) || !enable_network) {
+          if (!isTRUE(getOption("LLMRAgent.enable_network", FALSE)) || !enable_network) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
 R/30_tools_basic.R:55:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 133 characters.
-            stop("Network-disabled: set options(LLMR.Agent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
+            stop("Network-disabled: set options(LLMRAgent.enable_network=TRUE) and call register_basic_tools(enable_network=TRUE).")
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 R/30_tools_basic.R:57:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 86 characters.
           if (!requireNamespace("httr2", quietly = TRUE)) stop("httr2 not installed.")

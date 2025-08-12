@@ -1,7 +1,7 @@
 ## LLMR Integration Example (requires API key)
-## Run: source(system.file("examples", "02_llmr_integration.R", package = "LLMR.Agent"))
+## Run: source(system.file("examples", "02_llmr_integration.R", package = "LLMRAgent"))
 
-library(LLMR.Agent)
+library(LLMRAgent)
 
 # Check if LLMR is available
 if (requireNamespace("LLMR", quietly = TRUE)) {

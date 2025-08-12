@@ -1,7 +1,7 @@
 ## JSON Mode Demo (requires API key)
-## Run: source(system.file("examples", "03_json_mode_demo.R", package = "LLMR.Agent"))
+## Run: source(system.file("examples", "03_json_mode_demo.R", package = "LLMRAgent"))
 
-library(LLMR.Agent)
+library(LLMRAgent)
 
 if (requireNamespace("LLMR", quietly = TRUE)) {
 

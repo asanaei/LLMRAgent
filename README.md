@@ -1,17 +1,17 @@
-# LLMR.Agent
+# LLMRAgent
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R-CMD-check](https://github.com/asanaei/LLMR.Agent/workflows/R-CMD-check/badge.svg)](https://github.com/asanaei/LLMR.Agent/actions)
+[![R-CMD-check](https://github.com/asanaei/LLMRAgent/workflows/R-CMD-check/badge.svg)](https://github.com/asanaei/LLMRAgent/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CRAN status](https://www.r-pkg.org/badges/version/LLMR.Agent)](https://CRAN.R-project.org/package=LLMR.Agent)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/LLMR.Agent)](https://CRAN.R-project.org/package=LLMR.Agent)
-[![GitHub issues](https://img.shields.io/github/issues/asanaei/LLMR.Agent)](https://github.com/asanaei/LLMR.Agent/issues)
+[![CRAN status](https://www.r-pkg.org/badges/version/LLMRAgent)](https://CRAN.R-project.org/package=LLMRAgent)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/LLMRAgent)](https://CRAN.R-project.org/package=LLMRAgent)
+[![GitHub issues](https://img.shields.io/github/issues/asanaei/LLMRAgent)](https://github.com/asanaei/LLMRAgent/issues)
 <!-- badges: end -->
 
 > **Simple agent framework for R that integrates directly with LLMR package**
 
-LLMR.Agent provides a clean, simple interface for creating AI agents using LLMR model configurations. No complex adapters, just direct integration with `LLMR::llm_config()` and `call_llm_robust()`.
+LLMRAgent provides a clean, simple interface for creating AI agents using LLMR model configurations. No complex adapters, just direct integration with `LLMR::llm_config()` and `call_llm_robust()`.
 
 ## Key Features
 
@@ -26,7 +26,7 @@ LLMR.Agent provides a clean, simple interface for creating AI agents using LLMR 
 ### From CRAN (Available in ~2 weeks)
 
 ```r
-install.packages("LLMR.Agent")
+install.packages("LLMRAgent")
 ```
 
 ### From GitHub (Current)
@@ -37,8 +37,8 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
 
-# Install LLMR.Agent
-devtools::install_github("asanaei/LLMR.Agent")
+# Install LLMRAgent
+devtools::install_github("asanaei/LLMRAgent")
 ```
 
 ## Prerequisites
@@ -53,7 +53,7 @@ install.packages("LLMR")  # Or devtools::install_github("asanaei/LLMR")
 
 ```r
 library(LLMR)
-library(LLMR.Agent)
+library(LLMRAgent)
 
 # Create LLMR model configuration
 config <- LLMR::llm_config(
@@ -172,8 +172,8 @@ new_agent("Be helpful.")
 
 ## Documentation
 
-- **Vignette**: `vignette("quickstart", package = "LLMR.Agent")`
-- **Examples**: `system.file("examples", package = "LLMR.Agent")`
+- **Vignette**: `vignette("quickstart", package = "LLMRAgent")`
+- **Examples**: `system.file("examples", package = "LLMRAgent")`
 - **Help**: `?new_agent`, `?agent_reply`
 
 ## Related Packages
@@ -195,12 +195,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Citation
 
 ```r
-citation("LLMR.Agent")
+citation("LLMRAgent")
 ```
 
 ## Issues
 
-Found a bug or have a suggestion? Please [open an issue](https://github.com/asanaei/LLMR.Agent/issues).
+Found a bug or have a suggestion? Please [open an issue](https://github.com/asanaei/LLMRAgent/issues).
 
 ---
 

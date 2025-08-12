@@ -1,9 +1,9 @@
 ## Simple Agent Example with OpenAI
 ## Requires OPENAI_API_KEY environment variable
-## Run: source(system.file("examples", "01_simple_echo.R", package = "LLMR.Agent"))
+## Run: source(system.file("examples", "01_simple_echo.R", package = "LLMRAgent"))
 
 library(LLMR)
-library(LLMR.Agent)
+library(LLMRAgent)
 
 # Check for API key
 if (Sys.getenv("OPENAI_API_KEY") == "") {

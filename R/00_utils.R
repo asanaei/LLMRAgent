@@ -9,7 +9,7 @@
     #' @keywords internal
     #' @noRd
     .rl <- function(...) {
-      msg <- paste0("[LLMR.Agent] ", paste0(..., collapse = ""))
+      msg <- paste0("[LLMRAgent] ", paste0(..., collapse = ""))
       message(msg)
     }
 
