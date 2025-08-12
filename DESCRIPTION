@@ -28,5 +28,5 @@ Suggests:
     pkgdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/your-org/LLMRAgent
-BugReports: https://github.com/your-org/LLMRAgent/issues
+URL: https://github.com/asanaei/LLMRAgent
+BugReports: https://github.com/asanaei/LLMRAgent/issues
