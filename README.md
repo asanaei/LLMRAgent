@@ -15,15 +15,12 @@ LLMRAgent provides a clean, simple interface for creating AI agents using LLMR m
 
 ## Key Features
 
-- **🎯 Direct LLMR Integration**: Uses `LLMR::llm_config()` directly - no adapters
-- **📊 JSON Mode by Default**: Built-in support for structured responses
-- **🧠 Memory Management**: Configurable conversation history
-- **🔧 Simple API**: Clean, minimal interface
-- **✅ Robust**: Proper error handling and validation
+- **Direct LLMR Integration**: Uses `LLMR::llm_config()` directly 
+- **Made to be intuitive to use**
 
 ## Installation
 
-### From CRAN (Available in ~2 weeks)
+### From CRAN (When available)
 
 ```r
 install.packages("LLMRAgent")
@@ -201,7 +198,10 @@ citation("LLMRAgent")
 ## Issues
 
 Found a bug or have a suggestion? Please [open an issue](https://github.com/asanaei/LLMRAgent/issues).
+<<<<<<< HEAD
 
 ---
 
 **Made with ❤️ for the R community**
+=======
+>>>>>>> fa48ca8 (readme update)
