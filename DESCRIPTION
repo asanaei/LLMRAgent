@@ -1,0 +1,32 @@
+Type: Package
+Package: LLMR.Agent
+Title: Conservative Agent Framework for LLM Workflows in R
+Version: 0.1.0
+Author: Ali Sanaei <sanaei@uchicago.edu>
+Authors@R: 
+    person("Ali", "Sanaei", , "sanaei@uchicago.edu", role = c("aut", "cre"))
+Maintainer: Ali Sanaei <sanaei@uchicago.edu>
+Description: Simple agent framework for R that integrates directly with LLMR package. Provides clean agent interface using model configs directly with call_llm_robust, supporting JSON mode by default. Includes memory management and deterministic testing without network dependencies.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 4.2)
+Imports:
+    tibble,
+    purrr,
+    jsonlite,
+    utils
+Suggests:
+    httr2,
+    testthat (>= 3.0.0),
+    LLMR,
+    knitr,
+    rmarkdown,
+    lintr,
+    pkgdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+URL: https://github.com/your-org/LLMR.Agent
+BugReports: https://github.com/your-org/LLMR.Agent/issues
