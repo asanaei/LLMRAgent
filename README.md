@@ -198,10 +198,3 @@ citation("LLMRAgent")
 ## Issues
 
 Found a bug or have a suggestion? Please [open an issue](https://github.com/asanaei/LLMRAgent/issues).
-<<<<<<< HEAD
-
----
-
-**Made with ❤️ for the R community**
-=======
->>>>>>> fa48ca8 (readme update)
