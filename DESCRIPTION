@@ -1,7 +1,7 @@
 Type: Package
 Package: LLMRAgent
 Title: Conservative Agent Framework for LLM Workflows in R
-Version: 0.1.0
+Version: 0.1.1
 Author: Ali Sanaei <sanaei@uchicago.edu>
 Authors@R: 
     person("Ali", "Sanaei", , "sanaei@uchicago.edu", role = c("aut", "cre"))

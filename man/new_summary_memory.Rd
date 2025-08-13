@@ -2,24 +2,26 @@
 % Please edit documentation in R/03_memory.R
 \name{new_summary_memory}
 \alias{new_summary_memory}
-\title{Summary Memory (stub)}
+\title{Summary Memory (via LLMR model config)}
 \usage{
-new_summary_memory(...)
+new_summary_memory(model_config = NULL, ...)
 }
 \arguments{
+\item{model_config}{Optional LLMR model config from \code{LLMR::llm_config()}.}
+
 \item{...}{Reserved for future use.}
 }
 \value{
-An environment with a stable interface: \verb{$add(msg)}, \verb{$get()}, \verb{$summary()}.
+An environment with: \verb{$add(msg)}, \verb{$get()}, \verb{$set_config(cfg)}, \verb{$summary(max_chars = 500, model_config = NULL, system_prompt = NULL)}.
 }
 \description{
-A conservative interface for future summarising memory. This stub intentionally
-avoids calling any external LLMs. Methods emit a warning when not implemented.
+Summarizes recent conversation using the provided LLMR \code{model_config}. The configuration can be set at creation or per-call.
 }
 \examples{
+# Provide config at creation or per call
 sm <- new_summary_memory()
 sm$add(create_message("user","hello"))
-sm$summary()
+# sm$summary(model_config = cfg)
 }
 \seealso{
 \code{\link[=new_buffer_memory]{new_buffer_memory()}}, \link{memory-api}

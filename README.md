@@ -1,5 +1,8 @@
 # LLMRAgent
 
+<img src="https://github.com/asanaei/LLMRAgent/raw/main/assets/LLMRAgent_512x512.png" width="120" alt="LLMR logo">
+
+
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/asanaei/LLMRAgent/workflows/R-CMD-check/badge.svg)](https://github.com/asanaei/LLMRAgent/actions)
@@ -123,6 +126,43 @@ agent_reply(agent, "My name is Alice")
 agent_reply(agent, "What's my name?")  # Agent remembers!
 ```
 
+### Summarization
+
+Use summary memory to generate concise summaries via your LLMR configuration. You can set a dedicated summarizer config or fall back to the agent’s model config.
+
+```r
+# Create a summary memory (no config yet)
+sm <- new_summary_memory()
+
+# Agent injects a default summarizer config into the memory:
+# - uses summarizer_model_config if provided
+# - otherwise falls back to model_config
+agent <- new_agent(
+  system_prompt = "Be concise.",
+  model_config = config,
+  memory = sm,
+  summarizer_model_config = config  # optional; can be a different model
+)
+
+# Optionally switch summarizer model later
+agent$set_summarizer_config(config)
+
+# Summarize recent conversation (requires valid config)
+summary_text <- sm$summary(max_chars = 400)
+cat(summary_text)
+```
+
+## Persistence
+
+Save and load agent state (system prompt, memory, usage, and model config):
+
+```r
+save_path <- tempfile(fileext = ".rds")
+save_agent(agent, save_path)
+
+agent2 <- load_agent(save_path)
+```
+
 ## Examples
 
 See the `inst/examples/` directory for complete examples:
@@ -131,6 +171,8 @@ See the `inst/examples/` directory for complete examples:
 - **JSON Mode**: Structured response handling  
 - **Memory**: Multi-turn conversations
 - **Multiple Providers**: OpenAI, Anthropic, etc.
+ - **Summarization**: Off-the-shelf summarizer agent and summary memory
+ - **Multi-Agent (Conservative)**: Minimal orchestrator for round-robin collaboration
 
 ## API Reference
 

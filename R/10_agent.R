@@ -7,7 +7,9 @@
     #'
     #' @param system_prompt System message to prepend.
     #' @param model_config LLMR model config from `LLMR::llm_config()`. Required.
-    #' @param memory Memory object from `new_buffer_memory()`.
+    #' @param memory Memory object from `new_buffer_memory()` or `new_summary_memory()`.
+    #' @param summarizer_model_config Optional LLMR config used by summary memory.
+    #'   If `NULL` and `memory` is a summary memory without its own config, defaults to `model_config`.
     #' @return An agent environment with built-in usage tracking.
     #' @examples
     #' if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
@@ -19,7 +21,8 @@
     #' }
     #' @seealso [agent_reply()], [agent_usage()], [agent_usage_reset()]
     #' @export
-    new_agent <- function(system_prompt = "", model_config, memory = new_buffer_memory(10)) {
+    new_agent <- function(system_prompt = "", model_config, memory = new_buffer_memory(10),
+                          summarizer_model_config = NULL) {
       if (missing(model_config) || is.null(model_config)) {
         stop("model_config is required. Use LLMR::llm_config() to create one.")
       }
@@ -32,6 +35,23 @@
       env$system_prompt <- as.character(system_prompt)[1]
       env$memory <- memory
       env$model_config <- model_config
+      # If memory is a summary memory and lacks config, set a default summarizer config
+      if (inherits(env$memory, "llmr_summary_memory")) {
+        default_sum_cfg <- summarizer_model_config %||% model_config
+        # use accessor if available, else set field
+        if (is.null(env$memory$model_config)) {
+          if (is.function(env$memory$set_config)) env$memory$set_config(default_sum_cfg) else env$memory$model_config <- default_sum_cfg
+        }
+      }
+      # Convenience setter for summarizer config if memory supports it
+      env$set_summarizer_config <- function(cfg) {
+        if (inherits(env$memory, "llmr_summary_memory")) {
+          if (is.function(env$memory$set_config)) env$memory$set_config(cfg) else env$memory$model_config <- cfg
+          invisible(TRUE)
+        } else {
+          stop("Current memory does not support summarizer configuration.")
+        }
+      }
       env$usage_history <- list()
       env$total_tokens_in <- 0
       env$total_tokens_out <- 0

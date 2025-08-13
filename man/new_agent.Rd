@@ -4,14 +4,22 @@
 \alias{new_agent}
 \title{Create Agent with Model Config}
 \usage{
-new_agent(system_prompt = "", model_config, memory = new_buffer_memory(10))
+new_agent(
+  system_prompt = "",
+  model_config,
+  memory = new_buffer_memory(10),
+  summarizer_model_config = NULL
+)
 }
 \arguments{
 \item{system_prompt}{System message to prepend.}
 
 \item{model_config}{LLMR model config from \code{LLMR::llm_config()}. Required.}
 
-\item{memory}{Memory object from \code{new_buffer_memory()}.}
+\item{memory}{Memory object from \code{new_buffer_memory()} or \code{new_summary_memory()}.}
+
+\item{summarizer_model_config}{Optional LLMR config used by summary memory. If \code{NULL} and
+\code{memory} is a summary memory without its own config, defaults to \code{model_config}.}
 }
 \value{
 An agent environment with built-in usage tracking.

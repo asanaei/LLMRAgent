@@ -172,6 +172,24 @@ if (requireNamespace("LLMR", quietly = TRUE) &&
 }
 ```
 
+## Summarization
+
+If you attach a summary memory, it can summarize recent conversation using your LLMR model configuration. You can provide a dedicated summarizer config or let the agent fall back to its main config.
+
+```{r summarization, eval=FALSE}
+sm <- new_summary_memory()
+agent <- new_agent(
+  system_prompt = "Be concise.",
+  model_config = config,
+  memory = sm,
+  summarizer_model_config = config # or a different model for summarization
+)
+
+# After a conversation, get a short summary
+summary_text <- sm$summary(max_chars = 300)
+cat(summary_text)
+```
+
 ## Built-in Tools
 
 The package includes built-in tools that work offline:

@@ -45,7 +45,7 @@
 
     #' @keywords internal
     #' @noRd
-    .validate_args <- function(parameters, args) {
+    .validate_and_coerce_args <- function(parameters, args) {
       # extremely conservative: ensure only declared fields and required present
       if (!is.list(args)) stop("Tool args must be a list.")
       declared <- names(parameters)
@@ -54,7 +54,52 @@
       if (length(missing_req)) stop("Missing required args: ", paste(missing_req, collapse = ", "))
       extra <- setdiff(names(args), declared)
       if (length(extra)) stop("Unexpected args: ", paste(extra, collapse = ", "))
-      TRUE
+
+      # Coerce simple types and enforce simple constraints if provided
+      out <- args
+      for (nm in declared) {
+        spec <- parameters[[nm]]
+        if (is.null(out[[nm]])) next
+        val <- out[[nm]]
+        ptype <- spec$type %||% NULL
+
+        # type coercion
+        if (identical(ptype, "number")) {
+          val2 <- suppressWarnings(as.numeric(val))
+          if (is.na(val2)) stop(sprintf("Argument '%s' must be a number.", nm))
+          val <- val2
+        } else if (identical(ptype, "boolean")) {
+          if (is.logical(val)) {
+            val <- as.logical(val)
+          } else if (is.character(val)) {
+            v <- tolower(trimws(val))
+            if (v %in% c("true","t","1","yes")) val <- TRUE
+            else if (v %in% c("false","f","0","no")) val <- FALSE
+            else stop(sprintf("Argument '%s' must be boolean.", nm))
+          } else if (is.numeric(val)) {
+            val <- as.numeric(val) != 0
+          } else {
+            stop(sprintf("Argument '%s' must be boolean.", nm))
+          }
+        } else if (identical(ptype, "string")) {
+          val <- as.character(val)[1]
+        }
+
+        # constraints
+        if (!is.null(spec$enum)) {
+          if (!(val %in% spec$enum)) {
+            stop(sprintf("Argument '%s' must be one of: %s", nm, paste(spec$enum, collapse = ", ")))
+          }
+        }
+        if (!is.null(spec$min) || !is.null(spec$max)) {
+          if (!is.numeric(val)) stop(sprintf("Argument '%s' must be numeric for range checks.", nm))
+          if (!is.null(spec$min) && val < spec$min) stop(sprintf("Argument '%s' must be >= %s", nm, spec$min))
+          if (!is.null(spec$max) && val > spec$max) stop(sprintf("Argument '%s' must be <= %s", nm, spec$max))
+        }
+
+        out[[nm]] <- val
+      }
+      out
     }
 
     #' Execute a Tool (internal)
@@ -64,8 +109,8 @@
     #' @keywords internal
     #' @noRd
     .run_tool <- function(tool, args) {
-      .validate_args(tool$parameters, args)
-      out <- tool$fun(args)
+      args2 <- .validate_and_coerce_args(tool$parameters, args)
+      out <- tool$fun(args2)
       stopifnot(is.character(out), length(out) == 1L)
       out
     }

@@ -8,6 +8,9 @@
 ^AGENTS\.md$
 ^pkgdown$
 ^docs$
+^assets$
+^\.github$
+
 
 # macOS files
 ^\\.DS_Store$
