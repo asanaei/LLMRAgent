@@ -11,7 +11,7 @@
     #' @param summarizer_model_config Optional LLMR config used by summary memory.
     #'   If `NULL` and `memory` is a summary memory without its own config, defaults to `model_config`.
     #' @return An agent environment with built-in usage tracking.
-    #' @examples
+    #' @examplesIf nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")
     #' if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
     #'   config <- LLMR::llm_config(provider = "openai", model = "gpt-4", 
     #'                              api_key = Sys.getenv("OPENAI_API_KEY"))
@@ -26,24 +26,24 @@
       if (missing(model_config) || is.null(model_config)) {
         stop("model_config is required. Use LLMR::llm_config() to create one.")
       }
-      
+      if (!inherits(model_config, "llm_config")) {
+        stop("model_config must inherit class 'llm_config'.")
+      }
       if (!requireNamespace("LLMR", quietly = TRUE)) {
         stop("Package 'LLMR' is required. Please install it.")
       }
-      
+
       env <- new.env(parent = emptyenv())
       env$system_prompt <- as.character(system_prompt)[1]
       env$memory <- memory
       env$model_config <- model_config
-      # If memory is a summary memory and lacks config, set a default summarizer config
+
       if (inherits(env$memory, "llmr_summary_memory")) {
         default_sum_cfg <- summarizer_model_config %||% model_config
-        # use accessor if available, else set field
         if (is.null(env$memory$model_config)) {
           if (is.function(env$memory$set_config)) env$memory$set_config(default_sum_cfg) else env$memory$model_config <- default_sum_cfg
         }
       }
-      # Convenience setter for summarizer config if memory supports it
       env$set_summarizer_config <- function(cfg) {
         if (inherits(env$memory, "llmr_summary_memory")) {
           if (is.function(env$memory$set_config)) env$memory$set_config(cfg) else env$memory$model_config <- cfg
@@ -52,51 +52,46 @@
           stop("Current memory does not support summarizer configuration.")
         }
       }
+
       env$usage_history <- list()
-      env$total_tokens_in <- 0
-      env$total_tokens_out <- 0
-      env$total_tokens <- 0
+      env$total_tokens_in <- 0L
+      env$total_tokens_out <- 0L
+      env$total_tokens <- 0L
       env
     }
 
     #' Ask the agent to reply
-    #'
-    #' Uses LLMR directly with the agent's model config.
-    #' Automatically tracks token usage in the agent.
-    #'
+    #' 
     #' @param agent Agent created by `new_agent()`.
-    #' @param user_text User message.
-    #' @param json Whether to use JSON mode (default TRUE if model supports it).
-    #' @seealso [new_agent()], [format_messages_for_api()], [agent_usage()]
-    #' @return character assistant reply.
+    #' @param user_text Character scalar user input.
+    #' @param json Logical; if TRUE (default) request JSON-structured output when supported.
+    #' @return Character scalar assistant reply.
     #' @examples
-    #' if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
-    #'   config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
-    #'                              api_key = Sys.getenv("OPENAI_API_KEY"))
-    #'   ag <- new_agent(system_prompt = "Be brief.", model_config = config)
-    #'   # reply <- agent_reply(ag, "hello")
-    #'   # usage <- agent_usage(ag)  # Get cumulative usage
-    #' }
+    #' # Minimal deterministic example without API call:
+    #' dummy <- new.env(); dummy$memory <- new_buffer_memory(2)
+    #' dummy$system_prompt <- ""; dummy$model_config <- list()
+    #' # agent_reply(dummy, "hello", json = FALSE)
     #' @export
     agent_reply <- function(agent, user_text, json = TRUE) {
       stopifnot(is.environment(agent))
-      
+
       msgs <- list()
       if (nzchar(agent$system_prompt)) {
         msgs <- c(msgs, list(create_message("system", agent$system_prompt)))
       }
       user_msg <- create_message("user", user_text)
       msgs <- c(msgs, agent$memory$get(), list(user_msg))
-      
-      # Use LLMR directly with model config
-      resp <- LLMR::call_llm_robust(
-        config = agent$model_config,
+
+      resp <- .call_llm_guarded(
+        config   = agent$model_config,
         messages = format_messages_for_api(msgs),
-        json = json
+        json_flag = json
       )
-      
-      # Handle different response formats from LLMR
-      reply_text <- if (is.character(resp)) {
+
+      # --- text extraction (works for llmr_response OR list) ---
+      reply_text <- if (inherits(resp, "llmr_response")) {
+        as.character(resp)
+      } else if (is.character(resp)) {
         resp[1]
       } else if (is.list(resp) && !is.null(resp$text)) {
         as.character(resp$text)[1]
@@ -105,34 +100,57 @@
       } else {
         as.character(resp)[1]
       }
-      
-      if (!nzchar(reply_text)) reply_text <- ""
-      
-      # Track usage information if available
-      if (is.list(resp)) {
-        tokens_in <- resp$tokens_in %||% resp$input_tokens %||% 0
-        tokens_out <- resp$tokens_out %||% resp$output_tokens %||% 0
-        tokens_total <- resp$tokens_total %||% resp$total_tokens %||% (tokens_in + tokens_out)
-        
-        # Update agent totals
-        agent$total_tokens_in <- agent$total_tokens_in + tokens_in
-        agent$total_tokens_out <- agent$total_tokens_out + tokens_out  
-        agent$total_tokens <- agent$total_tokens + tokens_total
-        
-        # Add to usage history
-        usage_record <- list(
-          timestamp = Sys.time(),
-          tokens_in = tokens_in,
-          tokens_out = tokens_out,
-          tokens_total = tokens_total,
-          finish_reason = resp$finish_reason %||% NA,
-          model = resp$model %||% NA,
-          user_text = substr(user_text, 1, 100), # First 100 chars for reference
-          reply_text = substr(reply_text, 1, 100)
-        )
-        agent$usage_history <- append(agent$usage_history, list(usage_record))
+      reply_text <- reply_text %||% ""
+
+      # --- token extraction (handles llmr_response OR list) ---
+      extract_counts <- function(r) {
+        u <- tryCatch(LLMR::tokens(r), error = function(e) NULL)
+        if (is.list(u)) {
+          ti <- as.integer(u$sent %||% u$input %||% u$prompt %||% u$prompt_tokens %||% u$input_tokens %||% 0L)
+          to <- as.integer(u$rec  %||% u$output %||% u$completion %||% u$completion_tokens %||% u$output_tokens %||% 0L)
+          tt <- as.integer(u$total %||% u$total_tokens %||% (ti + to))
+          return(list(`in` = ti, `out` = to, total = tt))
+        }
+        if (is.list(r)) {
+          us <- r$usage %||% (r$meta %||% list())$usage %||% NULL
+          if (!is.null(us)) {
+            ti <- as.integer(us$prompt_tokens %||% us$input_tokens %||% us$sent %||% 0L)
+            to <- as.integer(us$completion_tokens %||% us$output_tokens %||% us$rec %||% 0L)
+            tt <- as.integer(us$total_tokens %||% (ti + to))
+            return(list(`in` = ti, `out` = to, total = tt))
+          }
+        }
+        list(`in` = 0L, `out` = 0L, total = 0L)
       }
-      
+
+      counts <- extract_counts(resp)
+      tokens_in    <- as.integer(counts[["in"]]    %||% 0L)
+      tokens_out   <- as.integer(counts[["out"]]   %||% 0L)
+      tokens_total <- as.integer(counts[["total"]] %||% (tokens_in + tokens_out))
+
+      model_used <- {
+        if (inherits(resp, "llmr_response")) resp$model %||% NA_character_
+        else if (is.list(resp)) resp$model %||% (resp$meta %||% list())$model %||% NA_character_
+        else NA_character_
+      }
+
+      agent$total_tokens_in  <- agent$total_tokens_in  + tokens_in
+      agent$total_tokens_out <- agent$total_tokens_out + tokens_out
+      agent$total_tokens     <- agent$total_tokens     + tokens_total
+
+      fr <- if (inherits(resp, "llmr_response")) LLMR::finish_reason(resp) else NA_character_
+
+      agent$usage_history <- append(agent$usage_history, list(list(
+        timestamp     = Sys.time(),
+        tokens_in     = tokens_in,
+        tokens_out    = tokens_out,
+        tokens_total  = tokens_total,
+        finish_reason = fr,
+        model         = model_used,
+        user_text     = substr(user_text, 1, 100),
+        reply_text    = substr(reply_text, 1, 100)
+      )))
+
       out_msg <- create_message("assistant", reply_text)
       agent$memory$add(user_msg)
       agent$memory$add(out_msg)
@@ -150,7 +168,7 @@
     #'   \item{total_tokens}{Cumulative total tokens}
     #'   \item{interactions}{Number of interactions}
     #'   \item{history}{List of interaction records with timestamps and token details}
-    #' @examples
+    #' @examplesIf nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")
     #' if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
     #'   config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
     #'                              api_key = Sys.getenv("OPENAI_API_KEY"))
@@ -179,7 +197,7 @@
     #' 
     #' @param agent Agent created by `new_agent()`.
     #' @return Nothing (invisibly).
-    #' @examples
+    #' @examplesIf nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")
     #' if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
     #'   config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
     #'                              api_key = Sys.getenv("OPENAI_API_KEY"))

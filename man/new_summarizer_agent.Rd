@@ -12,9 +12,11 @@ new_summarizer_agent(
 )
 }
 \arguments{
-\item{model_config}{LLMR model config used as default for chat and fallback summarization.}
+\item{model_config}{LLMR model config used as default for chat and fallback
+summarization.}
 
-\item{summarizer_model_config}{Optional LLMR model config used specifically for summarization.}
+\item{summarizer_model_config}{Optional LLMR model config used specifically
+for summarization.}
 
 \item{system_prompt}{System prompt for summarization.}
 
@@ -24,15 +26,14 @@ new_summarizer_agent(
 An agent environment suitable for summarization tasks.
 }
 \description{
-Convenience factory for an agent configured to summarize text/conversations. It sets a concise summarizer system prompt and wires a summary memory using the provided \code{summarizer_model_config} (or falls back to \code{model_config}).
+Convenience factory for an agent configured to summarize text/conversations.
+It sets a concise summarizer system prompt and wires a summary memory
+using the provided \code{summarizer_model_config} (or falls back to \code{model_config}).
 }
 \examples{
-\dontrun{
-  cfg <- LLMR::llm_config(
-    provider = "openai",
-    model    = "gpt-4o-mini",
-    api_key  = Sys.getenv("OPENAI_API_KEY")
-  )
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  cfg <- LLMR::llm_config(provider = "openai", model = "gpt-4o-mini",
+  api_key = Sys.getenv("OPENAI_API_KEY"))
   ag <- new_summarizer_agent(model_config = cfg)
-}
+\dontshow{\}) # examplesIf}
 }

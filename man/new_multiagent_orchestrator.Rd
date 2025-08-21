@@ -12,31 +12,35 @@ new_multiagent_orchestrator(
 )
 }
 \arguments{
-\item{participants}{List of participants of the form list(list(role, agent), ...). Each \code{agent} is created by \code{new_agent()}. \code{role} is a string used in transcripts.}
+\item{participants}{List of participants of the form list(list(role, agent), ...).
+Each \code{agent} is created by \code{new_agent()}. \code{role} is a string used in transcripts.}
 
-\item{termination_fn}{Function taking the current transcript (list of messages) and returning TRUE when the session should stop. Defaults to \code{final_keyword_termination("[FINAL]")}.}
+\item{termination_fn}{Function taking the current transcript (list of messages)
+and returning TRUE when the session should stop. Defaults to
+\verb{final_keyword_termination("\[FINAL\]")}.}
 
 \item{max_turns}{Maximum total agent turns (safety bound). Default 6.}
 
-\item{step_fn}{Function called as \code{step_fn(agent, input_text)} returning a character reply. Defaults to calling \code{agent_reply(agent, input_text, json = FALSE)}.}
+\item{step_fn}{Function called as \code{step_fn(agent, input_text)} returning
+a character reply.
+Defaults to calling \code{agent_reply(agent, input_text, json = FALSE)}.}
 }
 \value{
 An environment with methods: \verb{$run(initial_user_text)}, \verb{$transcript()}.
 }
 \description{
-Conservatively coordinates a small set of agents in a round-robin loop. No tool/function-calling is performed. A termination function and step function are injectable for deterministic testing and custom policies.
+Conservatively coordinates a small set of agents in a round-robin loop.
+No tool/function-calling is performed. A termination function and step
+function are injectable for deterministic testing and custom policies.
 }
 \examples{
 # Deterministic test-style use (no API calls):
-dummy <- new.env()
-dummy$memory <- new_buffer_memory(2)
+dummy <- new.env(); dummy$memory <- new_buffer_memory(2)
 dummy$system_prompt <- ""
 dummy$model_config <- list()
 orchestrator <- new_multiagent_orchestrator(
-  participants = list(
-    list(role = "assistant", agent = dummy),
-    list(role = "critic", agent = dummy)
-  ),
+  participants = list(list(role = "assistant", agent = dummy),
+  list(role = "critic", agent = dummy)),
   step_fn = function(agent, input_text) "[FINAL] done"
 )
 out <- orchestrator$run("hello")

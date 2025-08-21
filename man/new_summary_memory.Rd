@@ -12,16 +12,21 @@ new_summary_memory(model_config = NULL, ...)
 \item{...}{Reserved for future use.}
 }
 \value{
-An environment with: \verb{$add(msg)}, \verb{$get()}, \verb{$set_config(cfg)}, \verb{$summary(max_chars = 500, model_config = NULL, system_prompt = NULL)}.
+An environment with: \verb{$add(msg)}, \verb{$get()}, \verb{$set_config(cfg)},
+\verb{$summary(max_chars = 500, model_config = NULL, system_prompt = NULL)}.
 }
 \description{
-Summarizes recent conversation using the provided LLMR \code{model_config}. The configuration can be set at creation or per-call.
+Summarizes recent conversation using the provided LLMR \code{model_config}. The
+configuration can be set at creation or per-call. No external calls are made
+unless a valid \code{model_config} is provided.
 }
 \examples{
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Provide config at creation or per call
 sm <- new_summary_memory()
 sm$add(create_message("user","hello"))
 # sm$summary(model_config = cfg)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=new_buffer_memory]{new_buffer_memory()}}, \link{memory-api}

@@ -13,10 +13,5 @@ format_messages_for_api(msg_list)
 A list suitable for API submission.
 }
 \description{
-Strips non-standard fields and returns a data structure commonly
-accepted by LLM chat APIs.
-}
-\examples{
-msgs <- list(create_message("user","hi"))
-format_messages_for_api(msgs)
+Strips only non-API fields and preserves tool-calling metadata if present.
 }

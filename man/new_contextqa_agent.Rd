@@ -4,12 +4,18 @@
 \alias{new_contextqa_agent}
 \title{Create a context-based QA agent (no retrieval)}
 \usage{
-new_contextqa_agent(model_config, system_prompt = NULL, memory = new_buffer_memory(6))
+new_contextqa_agent(
+  model_config,
+  system_prompt = NULL,
+  memory = new_buffer_memory(6)
+)
 }
 \arguments{
 \item{model_config}{LLMR model config.}
 
-\item{system_prompt}{Optional system prompt used for QA. If NULL, a concise default is used that instructs answering strictly from provided snippets, citing as [S#], and saying 'Insufficient information.' when needed.}
+\item{system_prompt}{Optional system prompt used for QA. If NULL, a concise
+default is used that instructs answering strictly from provided snippets,
+citing as [S#], and saying 'Insufficient information.' when needed.}
 
 \item{memory}{Optional memory; defaults to small buffer.}
 }
@@ -17,10 +23,20 @@ new_contextqa_agent(model_config, system_prompt = NULL, memory = new_buffer_memo
 An agent environment.
 }
 \description{
-Factory for a conservative QA agent that answers strictly from provided context snippets supplied by the caller. No retrieval, no tools.
+Factory for a conservative QA agent that answers strictly from provided
+context snippets supplied by the caller. No retrieval, no tools.
 }
 \examples{
-qa <- new_contextqa_agent(model_config = list(provider="openai", model="gpt-4o-mini"))
-msg <- build_context_message("What is X?", c("Snippet one.", "Snippet two."))
-# agent_reply(qa, msg)
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  if (requireNamespace("LLMR", quietly = TRUE)) {
+    cfg <- LLMR::llm_config(
+      provider = "openai",
+      model = "gpt-4o-mini",
+      api_key = Sys.getenv("OPENAI_API_KEY")
+    )
+    qa <- new_contextqa_agent(model_config = cfg)
+    msg <- build_context_message("What is X?", c("Snippet one.", "Snippet two."))
+    # agent_reply(qa, msg)
+  }
+\dontshow{\}) # examplesIf}
 }

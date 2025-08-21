@@ -65,19 +65,19 @@
 
         # type coercion
         if (identical(ptype, "number")) {
-          val2 <- suppressWarnings(as.numeric(val))
+          val2 <- suppressWarnings(as.numeric(val)[1])
           if (is.na(val2)) stop(sprintf("Argument '%s' must be a number.", nm))
           val <- val2
         } else if (identical(ptype, "boolean")) {
           if (is.logical(val)) {
-            val <- as.logical(val)
+            val <- as.logical(val)[1]
           } else if (is.character(val)) {
-            v <- tolower(trimws(val))
+            v <- tolower(trimws(val[1]))
             if (v %in% c("true","t","1","yes")) val <- TRUE
             else if (v %in% c("false","f","0","no")) val <- FALSE
             else stop(sprintf("Argument '%s' must be boolean.", nm))
           } else if (is.numeric(val)) {
-            val <- as.numeric(val) != 0
+            val <- as.numeric(val)[1] != 0
           } else {
             stop(sprintf("Argument '%s' must be boolean.", nm))
           }
@@ -159,12 +159,20 @@
     #' @export
     list_tools <- function() {
       reg <- getOption("LLMRAgent.tools", list())
-      if (!length(reg)) return(tibble::tibble(name = character(), description = character()))
-      tibble::tibble(
-        name = names(reg),
-        description = vapply(reg, `[[`, "", "description"),
-        stringsAsFactors = FALSE
-      )
+      if (!length(reg)) {
+        if (requireNamespace("tibble", quietly = TRUE)) {
+          return(tibble::tibble(name = character(), description = character()))
+        } else {
+          return(data.frame(name = character(), description = character(), stringsAsFactors = FALSE))
+        }
+      }
+      nms <- names(reg)
+      desc <- vapply(reg, `[[`, "", "description")
+      if (requireNamespace("tibble", quietly = TRUE)) {
+        tibble::tibble(name = nms, description = desc)
+      } else {
+        data.frame(name = nms, description = desc, stringsAsFactors = FALSE)
+      }
     }
 
     #' Clear all registered tools

@@ -7,20 +7,23 @@
 save_agent(agent, path)
 }
 \arguments{
-\item{agent}{Agent environment created by \code{new_agent()}.}
+\item{agent}{Agent object created by \code{new_agent()}}
 
-\item{path}{File path to save as \code{.rds}.}
+\item{path}{File path to write \code{.rds}}
 }
 \value{
-Invisibly, the path.
+Invisible \code{path}
 }
 \description{
-Persists system prompt, memory messages, usage history and counters, and model_config. Uses RDS serialization.
+Persists system prompt, memory messages, usage history and counters, and
+model_config.
+Uses RDS serialization.
 }
 \examples{
-\dontrun{
-  cfg <- LLMR::llm_config(provider = "openai", model = "gpt-4o-mini", api_key = "key")
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  cfg <- LLMR::llm_config(provider = "openai", model = "gpt-4o-mini",
+                      api_key = Sys.getenv("OPENAI_API_KEY"))
   ag <- new_agent("Be brief.", cfg)
   save_agent(ag, tempfile(fileext = ".rds"))
-}
+\dontshow{\}) # examplesIf}
 }

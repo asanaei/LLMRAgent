@@ -21,6 +21,7 @@ List with components:
 Returns the total token usage for this agent across all interactions.
 }
 \examples{
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
   config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
                              api_key = Sys.getenv("OPENAI_API_KEY"))
@@ -30,6 +31,7 @@ if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != 
   # cat("Total tokens used:", usage$total_tokens)
   # cat("Interactions:", usage$interactions)
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=agent_reply]{agent_reply()}}, \code{\link[=agent_usage_reset]{agent_usage_reset()}}

@@ -45,7 +45,7 @@
     #' @param ... Reserved for future use.
     #' @return An environment with: `$add(msg)`, `$get()`, `$set_config(cfg)`,
     #'   `$summary(max_chars = 500, model_config = NULL, system_prompt = NULL)`.
-    #' @examples
+    #' @examplesIf nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")
     #' # Provide config at creation or per call
     #' sm <- new_summary_memory()
     #' sm$add(create_message("user","hello"))
@@ -81,10 +81,10 @@
         )
         convo <- format_messages_for_api(recent)
         full_msgs <- c(list(list(role = "system", content = sys)), convo)
-        resp <- LLMR::call_llm_robust(
+        resp <- .call_llm_guarded(
           config = cfg,
           messages = full_msgs,
-          json = FALSE
+          json_flag = TRUE
         )
         # Extract text consistently
         out <- if (is.character(resp)) resp[1] else if (is.list(resp) && !is.null(resp$text)) as.character(resp$text)[1] else if (is.list(resp) && !is.null(resp$content)) as.character(resp$content)[1] else as.character(resp)[1]

@@ -16,7 +16,7 @@ new_classifier_agent(
 
 \item{labels}{Character vector of allowed labels (length >= 2).}
 
-\item{system_prompt}{Optional system prompt; labels are appended.}
+\item{system_prompt}{Optional system prompt; if NULL a short default is used.}
 
 \item{memory}{Optional memory; defaults to small buffer.}
 }
@@ -24,13 +24,20 @@ new_classifier_agent(
 An agent environment.
 }
 \description{
-Factory for a classifier agent that outputs a JSON object with keys 'label' and 'confidence' (0..1).
+Factory for a classifier agent that outputs a JSON object with keys 'label' and
+'confidence' (0..1).
 }
 \examples{
-clf <- new_classifier_agent(
-  list(provider = "openai", model = "gpt-4o-mini"),
-  labels = c("positive", "negative")
-)
-umsg <- build_classification_prompt("The movie was great!", c("positive", "negative"))
-# json <- agent_reply(clf, umsg, json = TRUE)
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  if (requireNamespace("LLMR", quietly = TRUE)) {
+    cfg <- LLMR::llm_config(
+      provider = "openai",
+      model = "gpt-4o-mini",
+      api_key = Sys.getenv("OPENAI_API_KEY")
+    )
+    clf <- new_classifier_agent(cfg, labels = c("positive","negative"))
+    umsg <- build_classification_prompt("Great movie!", c("positive","negative"))
+    # json <- agent_reply(clf, umsg, json = TRUE)
+  }
+\dontshow{\}) # examplesIf}
 }

@@ -66,27 +66,57 @@
         }
       )
 
-      # execute_r (sandboxed)
       execute_r <- make_tool(
         name = "execute_r",
         description = "Execute small R code snippets safely with time limits; returns captured output.",
-        parameters = list(code = list(type="string", required=TRUE)),
+        parameters = list(code = list(type = "string", required = TRUE)),
         fun = function(args) {
           code <- as.character(args$code)[1]
-          # time limits
           cpu <- getOption("LLMRAgent.execute_r.max_seconds", 2)
           elp <- getOption("LLMRAgent.execute_r.max_elapsed", 5)
           setTimeLimit(cpu = cpu, elapsed = elp, transient = TRUE)
           on.exit(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), add = TRUE)
-          # locked env with minimal bindings
+
+          # Evaluate in a child env that shadows risky functions while keeping base ops available.
           safe_env <- new.env(parent = baseenv())
-          # strip dangerous functions
-          safe_env$system <- function(...) stop("system() disabled")
-          safe_env$file.remove <- function(...) stop("file.remove() disabled")
-          safe_env$download.file <- function(...) stop("download.file() disabled")
-          out <- utils::capture.output({
-            eval(parse(text = code), envir = safe_env)
-          })
+
+          # Helper to stub many names quickly
+          block <- function(...) {
+            lapply(list(...), function(fn) {
+              safe_env[[fn]] <<- function(...) stop(paste0(fn, "() disabled"))
+            })
+            invisible(NULL)
+          }
+
+          # Packages / namespace
+          block("library","require","requireNamespace","getNamespace","loadNamespace")
+
+          # Processes / timing
+          block("system","system2","proc.time","system.time","Sys.sleep")
+
+          # Env & machine info
+          block("Sys.getenv","Sys.setenv","Sys.unsetenv","Sys.info","R.home")
+
+          # Files / directories
+          block("download.file","unlink","file.remove","file.create","file.rename","file.copy",
+                "dir.create","setwd","getwd","list.files","dir","file.exists","file.access",
+                "normalizePath","path.expand","file.path")
+
+          # Connections & readers
+          block("file","gzfile","bzfile","xzfile","unz","url","pipe","fifo","socketConnection","gzcon",
+                "readLines","scan","read.csv","read.table","read.delim","readRDS","load","data")
+
+          # Graphics / sinks / output redirection
+          block("sink","sink.number","pdf","png","jpeg","bmp","tiff","svg")
+
+          # Keep writeLines disabled too
+          safe_env$writeLines <- function(...) stop("writeLines() disabled")
+
+          out <- try(utils::capture.output(eval(parse(text = code), envir = safe_env)), silent = TRUE)
+          if (inherits(out, "try-error")) {
+            msg <- tryCatch(conditionMessage(attr(out, "condition")), error = function(e) "error")
+            stop(msg)
+          }
           paste(out, collapse = "\n")
         }
       )

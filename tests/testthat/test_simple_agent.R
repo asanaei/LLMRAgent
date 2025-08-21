@@ -1,17 +1,9 @@
-# Helper function from LLMR testing pattern
-skip_if_no_key <- function(key_name = "OPENAI_API_KEY") {
-  if (Sys.getenv(key_name) == "") {
-    testthat::skip(paste("Environment variable", key_name, "not set"))
-  }
-}
-
 test_that("new_agent requires model_config", {
   expect_error(new_agent(system_prompt = "Be brief."), "model_config is required")
 })
 
 test_that("new_agent works with valid config", {
-  skip_on_cran()
-  skip_if_no_key("OPENAI_API_KEY")
+  skip_if_no_api()
   
   if (requireNamespace("LLMR", quietly = TRUE)) {
     config <- LLMR::llm_config(
@@ -31,8 +23,7 @@ test_that("new_agent works with valid config", {
 })
 
 test_that("agent with LLMR integration works", {
-  skip_on_cran()
-  skip_if_no_key("OPENAI_API_KEY")
+  skip_if_no_api()
   
   if (requireNamespace("LLMR", quietly = TRUE)) {
     config <- LLMR::llm_config(
@@ -56,8 +47,7 @@ test_that("agent with LLMR integration works", {
 })
 
 test_that("agent memory works properly", {
-  skip_on_cran()
-  skip_if_no_key("OPENAI_API_KEY")
+  skip_if_no_api()
   
   if (requireNamespace("LLMR", quietly = TRUE)) {
     config <- LLMR::llm_config(

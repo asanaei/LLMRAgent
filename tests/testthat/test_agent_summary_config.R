@@ -1,4 +1,5 @@
 test_that("new_agent wires summarizer config to summary memory by default", {
+  skip_if_no_api()
   if (!requireNamespace("LLMR", quietly = TRUE)) {
     testthat::skip("LLMR not installed")
   }
@@ -16,6 +17,7 @@ test_that("new_agent wires summarizer config to summary memory by default", {
 })
 
 test_that("new_agent respects explicit summarizer_model_config", {
+  skip_if_no_api()
   if (!requireNamespace("LLMR", quietly = TRUE)) {
     testthat::skip("LLMR not installed")
   }

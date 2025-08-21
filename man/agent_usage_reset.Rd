@@ -16,6 +16,7 @@ Nothing (invisibly).
 Clears the usage history and resets counters to zero.
 }
 \examples{
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
   config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
                              api_key = Sys.getenv("OPENAI_API_KEY"))
@@ -23,4 +24,5 @@ if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != 
   # agent_reply(ag, "hello")  
   # agent_usage_reset(ag)  # Clear usage history
 }
+\dontshow{\}) # examplesIf}
 }

@@ -1,4 +1,5 @@
 test_that("new_summarizer_agent constructs with summary memory and config", {
+  skip_if_no_api()
   if (!requireNamespace("LLMR", quietly = TRUE)) {
     testthat::skip("LLMR not installed")
   }

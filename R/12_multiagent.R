@@ -1,4 +1,4 @@
-    
+
     #' Simple Multi-Agent Orchestrator
     #'
     #' Conservatively coordinates a small set of agents in a round-robin loop.
@@ -8,9 +8,11 @@
     #' @param participants List of participants of the form list(list(role, agent), ...).
     #'   Each `agent` is created by `new_agent()`. `role` is a string used in transcripts.
     #' @param termination_fn Function taking the current transcript (list of messages)
-    #'   and returning TRUE when the session should stop. Defaults to `final_keyword_termination("[FINAL]")`.
+    #' and returning TRUE when the session should stop. Defaults to
+    #' `final_keyword_termination("\[FINAL\]")`.
     #' @param max_turns Maximum total agent turns (safety bound). Default 6.
-    #' @param step_fn Function called as `step_fn(agent, input_text)` returning a character reply.
+    #' @param step_fn Function called as `step_fn(agent, input_text)` returning
+    #' a character reply.
     #'   Defaults to calling `agent_reply(agent, input_text, json = FALSE)`.
     #' @return An environment with methods: `$run(initial_user_text)`, `$transcript()`.
     #' @examples
@@ -19,7 +21,8 @@
     #' dummy$system_prompt <- ""
     #' dummy$model_config <- list()
     #' orchestrator <- new_multiagent_orchestrator(
-    #'   participants = list(list(role = "assistant", agent = dummy), list(role = "critic", agent = dummy)),
+    #'   participants = list(list(role = "assistant", agent = dummy),
+    #'   list(role = "critic", agent = dummy)),
     #'   step_fn = function(agent, input_text) "[FINAL] done"
     #' )
     #' out <- orchestrator$run("hello")
@@ -37,7 +40,7 @@
       env$participants <- participants
       env$termination_fn <- termination_fn
       env$max_turns <- as.integer(max_turns)
-      env$step_fn <- step_fn %||% function(agent, input_text) agent_reply(agent, input_text, json = FALSE)
+      env$step_fn <- step_fn %||% function(agent, input_text) agent_reply(agent, input_text, json = TRUE)
       env$messages <- list()
 
       env$transcript <- function() env$messages
@@ -70,7 +73,7 @@
 
     #' Termination policy: stop when keyword appears in last assistant message
     #'
-    #' @param keyword Keyword (string) to detect, default "[FINAL]".
+    #' @param keyword Keyword (string) to detect, default "\[FINAL\]".
     #' @return A function suitable for `termination_fn`.
     #' @export
     final_keyword_termination <- function(keyword = "[FINAL]") {

@@ -13,7 +13,8 @@ load_agent(path)
 Agent environment.
 }
 \description{
-Reconstructs an agent from a file saved by \code{save_agent()}. Restores memory and usage counters; requires \code{LLMR} to be available for \code{new_agent()}.
+Reconstructs an agent from a file saved by \code{save_agent()}.
+Restores memory and usage counters; requires \code{LLMR} to be available for \code{new_agent()}.
 }
 \examples{
 \dontrun{

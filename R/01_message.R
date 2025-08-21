@@ -17,7 +17,7 @@
       stopifnot(role %in% c("system", "user", "assistant"))
       stopifnot(length(content) == 1L)
       structure(
-        purrr::compact(list(
+        Filter(Negate(is.null), list(
           role       = role,
           content    = as.character(content)[1],
           name       = name,
@@ -31,21 +31,17 @@
 
     #' Format messages for LLM API calls
     #'
-    #' Strips non-standard fields and returns a data structure commonly
-    #' accepted by LLM chat APIs.
+    #' Strips only non-API fields and preserves tool-calling metadata if present.
     #' @param msg_list A list of `llmr_agent_message` objects.
     #' @return A list suitable for API submission.
-    #' @examples
-    #' msgs <- list(create_message("user","hi"))
-    #' format_messages_for_api(msgs)
     #' @export
     format_messages_for_api <- function(msg_list) {
       stopifnot(is.list(msg_list))
       lapply(msg_list, function(m) {
-        list(
-          role = m$role,
-          content = m$content,
-          name = m$name %||% NULL
-        )
+        out <- list(role = m$role, content = m$content)
+        if (!is.null(m$name) && nzchar(m$name)) out$name <- m$name
+        if (!is.null(m$tool_calls))   out$tool_calls   <- m$tool_calls
+        if (!is.null(m$tool_call_id)) out$tool_call_id <- m$tool_call_id
+        out
       })
     }

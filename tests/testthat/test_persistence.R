@@ -1,4 +1,5 @@
 test_that("save_agent and load_agent round-trip basic state", {
+  skip_if_no_api()
   skip_if_not_installed <- function(pkg) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
       testthat::skip(paste("Package", pkg, "not installed"))

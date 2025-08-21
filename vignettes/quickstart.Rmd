@@ -8,7 +8,11 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(
+  eval = identical(Sys.getenv("LLMRAgent_RUN_VIGNETTES"), "true") &&
+         nzchar(Sys.getenv("OPENAI_API_KEY")),
+  collapse = TRUE, comment = "#>"
+)
 ```
 
 ```{r setup}

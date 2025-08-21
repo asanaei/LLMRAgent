@@ -9,26 +9,19 @@ agent_reply(agent, user_text, json = TRUE)
 \arguments{
 \item{agent}{Agent created by \code{new_agent()}.}
 
-\item{user_text}{User message.}
+\item{user_text}{Character scalar user input.}
 
-\item{json}{Whether to use JSON mode (default TRUE if model supports it).}
+\item{json}{Logical; if TRUE (default) request JSON-structured output when supported.}
 }
 \value{
-character assistant reply.
+Character scalar assistant reply.
 }
 \description{
-Uses LLMR directly with the agent's model config.
-Automatically tracks token usage in the agent.
+Ask the agent to reply
 }
 \examples{
-if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
-  config <- LLMR::llm_config(provider = "openai", model = "gpt-4",
-                             api_key = Sys.getenv("OPENAI_API_KEY"))
-  ag <- new_agent(system_prompt = "Be brief.", model_config = config)
-  # reply <- agent_reply(ag, "hello")
-  # usage <- agent_usage(ag)  # Get cumulative usage
-}
-}
-\seealso{
-\code{\link[=new_agent]{new_agent()}}, \code{\link[=format_messages_for_api]{format_messages_for_api()}}, \code{\link[=agent_usage]{agent_usage()}}
+# Minimal deterministic example without API call:
+dummy <- new.env(); dummy$memory <- new_buffer_memory(2)
+dummy$system_prompt <- ""; dummy$model_config <- list()
+# agent_reply(dummy, "hello", json = FALSE)
 }

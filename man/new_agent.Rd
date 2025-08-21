@@ -18,8 +18,8 @@ new_agent(
 
 \item{memory}{Memory object from \code{new_buffer_memory()} or \code{new_summary_memory()}.}
 
-\item{summarizer_model_config}{Optional LLMR config used by summary memory. If \code{NULL} and
-\code{memory} is a summary memory without its own config, defaults to \code{model_config}.}
+\item{summarizer_model_config}{Optional LLMR config used by summary memory.
+If \code{NULL} and \code{memory} is a summary memory without its own config, defaults to \code{model_config}.}
 }
 \value{
 An agent environment with built-in usage tracking.
@@ -30,6 +30,7 @@ Automatically tracks token usage across all interactions.
 Requires a valid LLMR model config to function.
 }
 \examples{
+\dontshow{if (nzchar(Sys.getenv("OPENAI_API_KEY")) && identical(Sys.getenv("LLMRAgent_RUN_EXAMPLES"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != "") {
   config <- LLMR::llm_config(provider = "openai", model = "gpt-4", 
                              api_key = Sys.getenv("OPENAI_API_KEY"))
@@ -37,6 +38,7 @@ if (requireNamespace("LLMR", quietly = TRUE) && Sys.getenv("OPENAI_API_KEY") != 
   # agent_reply(ag, "Hello")
   # usage <- agent_usage(ag)  # Check token usage
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=agent_reply]{agent_reply()}}, \code{\link[=agent_usage]{agent_usage()}}, \code{\link[=agent_usage_reset]{agent_usage_reset()}}
